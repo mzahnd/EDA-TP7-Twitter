@@ -22,6 +22,7 @@
     <ClCompile Include="src\DisplaySofi.cpp" />
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\RoccoLCD.cpp" />
     <ClCompile Include="src\TwitterLCD.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +38,7 @@
     <ClInclude Include="src\DisplayMartin.hpp" />
     <ClInclude Include="src\DisplaySofi.h" />
     <ClInclude Include="src\Gui.h" />
+    <ClInclude Include="src\RoccoLCD.h" />
     <ClInclude Include="src\TwitterLCD.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

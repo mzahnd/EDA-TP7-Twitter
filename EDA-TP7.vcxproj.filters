@@ -60,6 +60,9 @@
     <ClCompile Include="src\DisplaySofi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\RoccoLCD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TwitterLCD.h">
@@ -99,6 +102,9 @@
       <Filter>Libraries\DearImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\DisplaySofi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RoccoLCD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

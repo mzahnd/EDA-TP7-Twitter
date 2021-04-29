@@ -6,6 +6,7 @@
 
 #include "DisplayMartin.hpp"
 #include "DisplaySofi.h"
+#include "RoccoLCD.h"
 
 #include "Gui.h"
 
@@ -18,10 +19,11 @@
 enum DisplayOptions {
 	DISPLAY_OPT_SOFI = 0,
 	DISPLAY_OPT_MARTIN,
+	DISPLAY_OPT_ROCCO,
 	DISPLAY_OPT_NDISP
 };
 /* Uses DisplayOptions enum */
-const char* DisplayOptions[DISPLAY_OPT_NDISP] = { "Sofia", "Martin" };
+const char* DisplayOptions[DISPLAY_OPT_NDISP] = { "Sofia", "Martin", "Rocco" };
 
 /********************* CONSTRUCTOR *********************/
 GUI::GUI()
@@ -399,7 +401,16 @@ bool GUI::runTweetFeed(int chosenDisp)
 			this->previousLCD = DISPLAY_OPT_MARTIN;
 		}
 		break;
-
+	case DISPLAY_OPT_ROCCO:
+		if (this->previousLCD == DISPLAY_OPT_ROCCO) {
+			this->currentLCD->lcdClear();
+		}
+		else {
+			if (this->currentLCD != NULL) delete this->currentLCD;
+			this->currentLCD = new RoccoLCD();
+			this->previousLCD = DISPLAY_OPT_ROCCO;
+		}
+		break;
 	default:
 		break;
 	}
