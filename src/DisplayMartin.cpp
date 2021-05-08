@@ -44,7 +44,7 @@
 
 // Special -valid- characters for the display
 const char LCD_SPECIAL_CHARS[] = {
-	' ', '.', ':', ',', ';', '\'', '\"', '(', ')', 
+	' ', '.', ':', ',', ';', '\'', '\"', '(', ')', '@',
 	'!', '?', '+', '*', '/', '=', '<', '>', '-', '_'
 };
 
@@ -339,7 +339,7 @@ void DisplayMartin::insertText(const char* c)
 	// Validate input
 	for (std::size_t i = 0; i < valid_c.size(); i++) {
 		if (!isValidChar(valid_c[i])) {
-			valid_c.erase(i, 1);
+			valid_c.replace(i, 1, 1, ' ');
 		}
 	}
 
@@ -365,39 +365,30 @@ void DisplayMartin::insertText(const char* c)
 	else {
 		// Divide the string in 2 pieces:
 		// One with the remaining available characters after the cursor.
-		// The other one,when needed, with those to replace at the beggining of the string.
-		std::string portion1 = valid_c.substr(0, LCD_AV_CHAR - CURSOR_REAL_POSITION);
+		// The other one, when needed, with those to replace at the beggining of the string.
 
-		this->text.replace(CURSOR_REAL_POSITION, portion1.size(), portion1);
+		int newCurPos = 0;
 
-		if (valid_c.length() > (size_t)(LCD_AV_CHAR - CURSOR_REAL_POSITION)) {
-			std::string portion2;
-			portion2.assign(valid_c.substr(portion1.length()));
+		if (CURSOR_REAL_POSITION + valid_c.size() < LCD_AV_CHAR) {
+			this->text.replace(CURSOR_REAL_POSITION, valid_c.size(), valid_c);
 
-			this->text.replace(0,  portion2.size(), portion2);
-
-			// Move the cursor properly
-            if ((portion2.length() + CURSOR_REAL_POSITION) % LCD_AV_CHAR == 0) {
-				this->curPos.row = 0;
-				this->curPos.column= 0;
-			}
-			else {
-				this->curPos.row = (int)(portion2.length() / LCD_COLS);
-				this->curPos.column = (int)((portion2.length() - this->curPos.row * LCD_COLS));
-			}
+			newCurPos = valid_c.size() + CURSOR_REAL_POSITION;
 		}
 		else {
-			// Move the cursor properly
-			int totalNewPosition = portion1.length() + CURSOR_REAL_POSITION;
+			size_t charsCopied = LCD_AV_CHAR - CURSOR_REAL_POSITION;
+			this->text.replace(CURSOR_REAL_POSITION, charsCopied, valid_c, 0, charsCopied);
+			this->text.replace(0, valid_c.size() - charsCopied, valid_c, charsCopied, valid_c.size() - charsCopied);
 
-			if (totalNewPosition % LCD_AV_CHAR == 0) {
-				this->curPos.row = 0;
-				this->curPos.column= 0;
-			}
-			else {
-				this->curPos.row = (int)(totalNewPosition / LCD_COLS);
-				this->curPos.column = (int)(totalNewPosition - this->curPos.row * LCD_COLS);
-			}
+			newCurPos = valid_c.size() - charsCopied;
+		}
+
+		if (newCurPos % LCD_AV_CHAR == 0) {
+			this->curPos.row = 0;
+			this->curPos.column = 0;
+		}
+		else {
+			this->curPos.row = (int)(newCurPos / LCD_AV_CHAR);
+			this->curPos.column = (int)(newCurPos - this->curPos.row * LCD_AV_CHAR);
 		}
 	}
 
@@ -406,7 +397,7 @@ void DisplayMartin::insertText(const char* c)
 // GUI
 bool DisplayMartin::manualUpdateGUI(void)
 {
-	this->guiCursorEnabled = true;
+	this->guiCursorEnabled = false;
 	this->cursorState = true;
 	this->drawDisplay();
 

@@ -1,35 +1,18 @@
 #include <iostream>
 
+#include "Gui.h"
 #include "DisplayMartin.hpp"
 #include "TwitterLCD.h"
 
 int main(void)
 {
-	DisplayMartin dispM;
-	if (!dispM.lcdInitOk())
-		return 1;
+	bool runOk = false;
 
-	TwitterLCD tweet;
-	if (!tweet.isInit())
-		return 1;
+	GUI programita;
 
-	int status = -3;
-	status = tweet.startDownloading("foxnews", &dispM, 200);
-
-	while (status == DOWNLOADING)
-	{
-		status = tweet.getDownloadStatus();
+	if (programita.isInit()) {
+		runOk = programita.showGUI();
 	}
 
-	if (status != FINISHED_OK) {
-		printf("Error getting tweets!\n");
-		printf("Status code: %d\n", status);
-	}
-	else {
-		tweet.displayTweetsOnDisplay();
-		tweet.setNextTweet();
-
-	}
-
-	return 0;
+	return runOk;
 }

@@ -10,10 +10,11 @@
 
 #include <LCD/LCD.h>
 
-enum TWEETS_STATUS {
+enum TWEETS_STATE {
 	INTERNAL_ERROR = -2,
 	INVALID_ARGS = -1,
 	FINISHED_OK = 0,
+	TWEETS_OK = 0,
 	DOWNLOADING,
 	COULD_NOT_CONNECT,
 	USER_IS_PRIVATE,
@@ -23,6 +24,12 @@ enum TWEETS_STATUS {
 	TWITTER_ERROR,
 };
 
+typedef struct {
+	std::string date;
+	std::string text;
+	std::string time;
+} _tweet_t;
+
 class TwitterLCD
 {
 public:
@@ -31,15 +38,33 @@ public:
 
 	bool isInit();
 
-	/* Returns code using TWEETS_STATUS. If everything is OK, you should get 'DOWNLOADING' */
-	int startDownloading(std::string username, basicLCD* display, unsigned long long n_tweets = 50);
+	/* After downloading, returns accordingly to TWEETS_STATE.
+	* If a tweets download is in progress, it returns DOWNLOADING
+	* If this class is not initialized, returns INVALID_ARGS
+	*/
+	int getState();
+
+	/* Returns code using TWEETS_STATE. If everything is OK, you should get 'DOWNLOADING' */
+	bool startDownloading(std::string username, basicLCD* display, unsigned long long n_tweets = 50);
 	
-	/* Returns code using TWEETS_STATUS. */
-	int getDownloadStatus();
-	int interruptDownload();
+	/* Call this whenever you want to update whatever the display is showing */
+	bool updateDisplay();
+
+	/* Tweets have been downloaded and are being shown on display */
+	bool hasTweets();
+	/* Number of tweets downloaded and ready to show. */
+	unsigned long long tweetsAvailable();
+	/* Number of tweets that where intended to download. 
+	* It is not always equal to tweetsAvailable
+	*/
+	unsigned long long tweetsRequested();
+
+	/* Returns code using TWEETS_STATE. */
+	bool getDownloadState();	/* True if still downloading. False otherwise */
+	bool interruptDownload();
 	
 	/* Call this once after downloading has finished */
-	bool displayTweetsOnDisplay(); 
+	bool showTweetsOnDisplay(); 
 
 	/* Puts next tweet on the display. Does nothing if already in last. */
 	bool setNextTweet();
@@ -50,11 +75,12 @@ public:
 
 private:
 	bool init;
+	int errorCode;
 
 	unsigned long long nTweets;                /* Number of actually downloaded tweets */
 	std::string tweetsAuthor;
-	std::list<std::string> tweets;
-	std::list<std::string>::const_iterator currentTweet;
+	std::list<_tweet_t> tweets;
+	std::list<_tweet_t>::const_iterator currentTweet;
 
 	basicLCD * disp;
 
@@ -65,6 +91,7 @@ private:
 
 	bool downloading;
 	int stillRunning;
+	unsigned long long askedTweets;
 	
 
 	/* Twitter */
@@ -76,12 +103,18 @@ private:
 	unsigned animationTick;
 
 	bool getToken();
+
+	/* Get Twitter API Key from apikey.json file */
+	bool getApiKey(std::string& key, std::string& secret);
+
 	void printDownloadMsg();
-	void printTweet(std::string tweet);
+	void printTweet(_tweet_t tweet);
 
 	void printToDisplay(std::string topRow, std::string bottomRow, unsigned& animationCounter);
 	std::string stringRing(unsigned pos, std::string original);
 
+
+	int validTweets(void* parsedJsonData);
 };
 
 #endif /* ! _TWITTERLCD_H_ */

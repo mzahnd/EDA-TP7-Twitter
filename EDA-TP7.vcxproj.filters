@@ -19,6 +19,9 @@
     <Filter Include="Libraries\LCD">
       <UniqueIdentifier>{319ed542-f810-4693-8a84-7f9f2982c459}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libraries\DearImGui">
+      <UniqueIdentifier>{2f1de78c-528c-4332-b24d-7dfd065fdca8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -33,6 +36,27 @@
     <ClCompile Include="lib\LCD\LCDError.cpp">
       <Filter>Libraries\LCD</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ImGui\imgui.cpp">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ImGui\imgui_demo.cpp">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ImGui\imgui_draw.cpp">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ImGui\imgui_impl_allegro5.cpp">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ImGui\imgui_tables.cpp">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ImGui\imgui_widgets.cpp">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TwitterLCD.h">
@@ -46,6 +70,30 @@
     </ClInclude>
     <ClInclude Include="lib\LCD\LCD.h">
       <Filter>Libraries\LCD</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ImGui\imconfig.h">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ImGui\imgui.h">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ImGui\imgui_impl_allegro5.h">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ImGui\imgui_internal.h">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ImGui\imstb_rectpack.h">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ImGui\imstb_textedit.h">
+      <Filter>Libraries\DearImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ImGui\imstb_truetype.h">
+      <Filter>Libraries\DearImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
