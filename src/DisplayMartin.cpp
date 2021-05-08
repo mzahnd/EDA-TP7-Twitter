@@ -33,14 +33,14 @@
 
 #define GUI_CURSOR_COLOR			al_map_rgba(0, 0, 0, 100)
 
-#define BACKGROUND_PATH				"mzahnd\\res\\displayBoard.png"
+#define BACKGROUND_PATH				"res\\displayBoard.png"
 // Measured in pixels using the non-scaled bitmap. Automatically updated
 #define GUI_DISP_AREA_X1			104
 #define GUI_DISP_AREA_Y1			135
 #define GUI_DISP_AREA_X2			812
 #define GUI_DISP_AREA_Y2			363
 
-#define GUI_FONT_PATH				"mzahnd\\res\\AlphaSmart3000.ttf"
+#define GUI_FONT_PATH				"res\\AlphaSmart3000.ttf"
 
 // Special -valid- characters for the display
 const char LCD_SPECIAL_CHARS[] = {
