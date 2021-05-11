@@ -6,8 +6,6 @@
 
 //#include "..\\lib\\ImGui\imgui.h"
 //#include "..\\lib\\ImGui\imgui_impl_allegro5.h"
-#include <ImGui/imgui.h>
-#include <ImGui/imgui_impl_allegro5.h>
 
 #include "DisplayMartin.hpp"
 
@@ -31,6 +29,7 @@ GUI::GUI()
 {
 	this->init = true;
 	this->twError = TWEETS_OK;
+	this->ctx = NULL;
 	this->display = NULL;
 	this->evQueue = NULL;
 	this->timer.fps = NULL;
@@ -63,7 +62,7 @@ GUI::~GUI()
 	this->init = false;
 
 	ImGui_ImplAllegro5_Shutdown();
-	ImGui::DestroyContext();
+	ImGui::DestroyContext(this->ctx);
 
 	al_uninstall_keyboard();
 	al_uninstall_mouse();
@@ -178,7 +177,7 @@ bool GUI::initGui()
 	/* ImGui */
 
 	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
+	this->ctx = ImGui::CreateContext();
 	ImGui_ImplAllegro5_Init(display);
 	ImGui::StyleColorsDark();
 

@@ -5,6 +5,9 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_font.h>
 
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_allegro5.h>
+
 #include <LCD/LCD.h>
 
 #include "TwitterLCD.h"
@@ -32,7 +35,8 @@ private:
 		int tweetsNumber;
 		char twitterUsernameBuff[_USERNAME_BUFF];
 	} mainWindowData;
-
+	
+	ImGuiContext* ctx;
 	ALLEGRO_DISPLAY* display;
 	ALLEGRO_EVENT_QUEUE* evQueue;
 
