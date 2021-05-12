@@ -1,10 +1,6 @@
 #include <iostream>
 
 #include "Gui.h"
-#include "DisplayMartin.hpp"
-
-
-#include "TwitterLCD.h"
 
 int main(void)
 {

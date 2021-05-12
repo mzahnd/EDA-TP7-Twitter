@@ -271,6 +271,8 @@ bool LCDB::initGraphics() {
 	    return false;
     }
 
+	al_set_window_title(this->display, "Display Sofi");
+
     return true;
 }
 
