@@ -19,6 +19,7 @@
     <ClCompile Include="lib\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="lib\LCD\LCDError.cpp" />
     <ClCompile Include="src\DisplayMartin.cpp" />
+    <ClCompile Include="src\DisplaySofi.cpp" />
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\TwitterLCD.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="lib\LCD\LCD.h" />
     <ClInclude Include="lib\LCD\LCDError.h" />
     <ClInclude Include="src\DisplayMartin.hpp" />
+    <ClInclude Include="src\DisplaySofi.h" />
     <ClInclude Include="src\Gui.h" />
     <ClInclude Include="src\TwitterLCD.h" />
   </ItemGroup>

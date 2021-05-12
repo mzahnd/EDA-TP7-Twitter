@@ -8,6 +8,7 @@
 //#include "..\\lib\\ImGui\imgui_impl_allegro5.h"
 
 #include "DisplayMartin.hpp"
+#include "DisplaySofi.h"
 
 #include "Gui.h"
 
@@ -18,11 +19,12 @@
 #define GUI_WINDOW_TITLE			"Twitter Feed"
 
 enum DisplayOptions {
-	DISPLAY_OPT_MARTIN = 0,
+	DISPLAY_OPT_SOFI = 0,
+	DISPLAY_OPT_MARTIN,
 	DISPLAY_OPT_NDISP
 };
 /* Uses DisplayOptions enum */
-const char* DisplayOptions[DISPLAY_OPT_NDISP] = { "Martin"};
+const char* DisplayOptions[DISPLAY_OPT_NDISP] = { "Sofia", "Martin" };
 
 /********************* CONSTRUCTOR *********************/
 GUI::GUI()
@@ -235,7 +237,7 @@ bool GUI::mainWindow()
 	bool retVal = true;
 	ImGuiWindowFlags window_flags = 0;
 
-	int selectedDisplay = 0;
+	static int selectedDisplay = 0;
 
 	struct ImVec4 errorMsgColor;
 	std::string errorMsg;
@@ -387,7 +389,14 @@ bool GUI::runTweetFeed(int chosenDisp)
 		}
 
 		break;
-
+	case DISPLAY_OPT_SOFI:
+		if (this->currentLCD == NULL) {
+			this->currentLCD = new LCDB();
+		}
+		else {
+			this->currentLCD->lcdClear();
+		}
+		break;
 	default:
 		break;
 	}

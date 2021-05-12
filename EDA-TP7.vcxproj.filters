@@ -57,6 +57,9 @@
     <ClCompile Include="lib\ImGui\imgui_widgets.cpp">
       <Filter>Libraries\DearImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\DisplaySofi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TwitterLCD.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="lib\ImGui\imstb_truetype.h">
       <Filter>Libraries\DearImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DisplaySofi.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
