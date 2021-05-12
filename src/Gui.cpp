@@ -4,9 +4,6 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 
-//#include "..\\lib\\ImGui\imgui.h"
-//#include "..\\lib\\ImGui\imgui_impl_allegro5.h"
-
 #include "DisplayMartin.hpp"
 #include "DisplaySofi.h"
 
@@ -39,6 +36,7 @@ GUI::GUI()
 	this->request.exit = false;
 	this->currentLCD = NULL;
 	this->tw = NULL;
+	this->previousLCD = DISPLAY_OPT_NDISP;
 
 	this->mainWindowData.isDownloading = false;
 	for (int i = 0; i < _USERNAME_BUFF; i++) {
@@ -248,7 +246,7 @@ bool GUI::mainWindow()
 	window_flags |= ImGuiWindowFlags_NoResize;			/* No Resize */
 	window_flags |= ImGuiWindowFlags_NoCollapse;		/* No Collapse */
 
-	ImGui::SetNextWindowSize(ImVec2(GUI_DISP_WIDTH, GUI_DISP_HEIGHT), ImGuiCond_Always); //Aca pongo tamaño de la pantalla
+	ImGui::SetNextWindowSize(ImVec2(GUI_DISP_WIDTH, GUI_DISP_HEIGHT), ImGuiCond_Always);
 
 	ImGui::Begin(GUI_WINDOW_TITLE, NULL, window_flags);
 
@@ -380,23 +378,28 @@ bool GUI::runTweetFeed(int chosenDisp)
 	}
 
 	switch (chosenDisp) {
-	case DISPLAY_OPT_MARTIN:
-		if (this->currentLCD == NULL) {
-			this->currentLCD = new DisplayMartin();
-		}
-		else {
-			this->currentLCD->lcdClear();
-		}
-
-		break;
 	case DISPLAY_OPT_SOFI:
-		if (this->currentLCD == NULL) {
-			this->currentLCD = new LCDB();
-		}
-		else {
+		if (this->previousLCD == DISPLAY_OPT_SOFI)  {
 			this->currentLCD->lcdClear();
 		}
+		else {
+			if (this->currentLCD != NULL) delete this->currentLCD;
+			this->currentLCD = new LCDB();
+			this->previousLCD = DISPLAY_OPT_SOFI;
+		}
 		break;
+
+    case DISPLAY_OPT_MARTIN:
+		if (this->previousLCD == DISPLAY_OPT_MARTIN)  {
+			this->currentLCD->lcdClear();
+		}
+		else {
+			if (this->currentLCD != NULL) delete this->currentLCD;
+			this->currentLCD = new DisplayMartin();
+			this->previousLCD = DISPLAY_OPT_MARTIN;
+		}
+		break;
+
 	default:
 		break;
 	}

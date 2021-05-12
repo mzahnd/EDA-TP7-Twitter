@@ -25,6 +25,7 @@ public:
 private:
 	bool init;
     basicLCD* currentLCD;
+	int previousLCD;
 	TwitterLCD* tw;
 
 	int twError;
