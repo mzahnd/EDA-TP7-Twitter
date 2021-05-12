@@ -108,12 +108,15 @@ DisplayMartin::~DisplayMartin()
     this->text.clear();
     this->curPos = { 0 };
 
-	al_uninstall_keyboard();
-	al_uninstall_mouse();
-	al_shutdown_primitives_addon();
-	al_shutdown_image_addon();
+	/* Not needed for this project.
+		as this shutdown and uninstall functions are called from the GUI class 
+	*/ 
+	//al_uninstall_keyboard();
+	//al_uninstall_mouse();
+	//al_shutdown_primitives_addon();
+	//al_shutdown_image_addon();
 	//al_shutdown_ttf_addon(); // Breaks everything \_(._.)_/
-	al_shutdown_font_addon();
+	//al_shutdown_font_addon();
 
 	if (this->timer.fps != NULL) al_destroy_timer(this->timer.fps);
 	if (this->timer.cursorBlink != NULL) al_destroy_timer(this->timer.cursorBlink);
@@ -382,6 +385,7 @@ void DisplayMartin::insertText(const char* c)
 			newCurPos = valid_c.size() - charsCopied;
 		}
 
+		/* Set cursor in the right position */
 		if (newCurPos % LCD_AV_CHAR == 0) {
 			this->curPos.row = 0;
 			this->curPos.column = 0;
@@ -550,11 +554,6 @@ bool DisplayMartin::initGui(void)
 		return false;
 	}
 
-	// Smooooth. Makes displays flicker :(
-	//al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
-	//al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
-	//al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
-
 	if (!al_init_primitives_addon()) {
 		fprintf(stderr, "failed to initialize primitives addon!\n");
 		return false;
@@ -614,7 +613,7 @@ bool DisplayMartin::initGui(void)
 	this->txtFont = al_load_ttf_font(GUI_FONT_PATH, 
 		(int) (_height_ratio * (GUI_DISP_AREA_Y2 - GUI_DISP_AREA_Y1 - GUI_TEXT_SEP_Y*3) / 2),
 		0);
-	if (this->background.bitmap == NULL) {
+	if (this->txtFont == NULL) {
 		fprintf(stderr, "Unable to load font.\n");
 		return false;
 	}
