@@ -37,6 +37,8 @@ public:
 private:
 	ALLEGRO_DISPLAY* display;
 	ALLEGRO_FONT* txtFont;
+	bool initGraphics();
+
 	char data[N_ROW][N_COLUMN]; //matriz donde se encuentra todo el texto del display
 	void getLine(int nLine);
 	void printData();

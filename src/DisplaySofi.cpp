@@ -5,36 +5,25 @@ using namespace std;
 
 //Se inicializan los datos y se crea el display
 LCDB::LCDB() {
-    initOk = 1;
+    initOk = true;
     //error = lcdError(NO_ERROR);
     spaceDisp = 1;
     cursorPos.row = 0;
     cursorPos.column = 0;
-    if (!al_init_font_addon()){
-        fprintf(stderr, "Failed to initialize the font !\n");
-        initOk = false;
-    }
-    this->display = al_create_display(N_COLUMN * U_SIZE, N_ROW * U_SIZE * 2);
-    if (!display) {
 
-        fprintf(stderr, "Failed to create display !\n");
-        initOk = 0;
-    }
+    initOk &= initGraphics();
+	
     lcdClear();
 }
 
 LCDB::~LCDB() {
-    al_shutdown_font_addon();
+    //al_shutdown_font_addon();
     al_destroy_display(display);
 }
 
 //Se inicializa la fuente
 bool LCDB::lcdInitOk() {
-    
-    if (!(txtFont = al_load_ttf_font("res\\love.ttf", U_SIZE, 0)) && initOk) {
-        fprintf(stderr, "Failed to initialize the font !\n");
-        initOk = false;
-    }
+
     return initOk;
 }
 
@@ -53,10 +42,8 @@ bool LCDB::lcdClear() {
     spaceDisp = 1;
     cursorPos.row = 0;
     cursorPos.column = 0;
-    al_set_target_backbuffer(this->display);
-    clearDisp();
-    //printCursor();
-    al_flip_display();
+
+    drawDisp();
     return true;
 }
 
@@ -68,11 +55,8 @@ bool LCDB::lcdClearToEOL() {
     while (nextPos(aux)) {
         data[aux.row][aux.column] = ' ';  //cambia el texto desde esa posicion
     }
-    al_set_target_backbuffer(this->display);
-    clearDisp();
-    //printCursor();
-    printData();
-    al_flip_display();
+
+    drawDisp();
     return 1;
 }
 
@@ -84,12 +68,9 @@ basicLCD& LCDB::operator<<(const char c) {
         data[cursorPos.row][cursorPos.column] = c;
         spaceDisp = nextPos(cursorPos);
     }
-   al_set_target_backbuffer(this->display);
-   clearDisp();
-   // printCursor();
-   printData();
-   al_flip_display();
-   return (*this);
+
+    drawDisp();
+    return (*this);
 }
 
 //Recibe una palabra y la escribe 
@@ -112,16 +93,15 @@ basicLCD& LCDB::operator<<(const char* c) {
         c++;
         spaceDisp = nextPos(cursorPos);
     }
-    al_set_target_backbuffer(this->display);
-    clearDisp();
-   // printCursor();
-    printData();
-    al_flip_display();
+
+    drawDisp();
     return (*this);
 }
 
 //Funcion que se encarga de imprimir el texto 
 void LCDB::printData() {
+    if (this->txtFont == NULL) return;
+
     for (int i = 0; i < N_ROW; i++) {
         getLine(i);
         al_draw_textf(txtFont, LETTER_COLOR, 2 * U_SIZE, 2 * U_SIZE * i, 0, line);
@@ -130,10 +110,9 @@ void LCDB::printData() {
 
 //Esta funcion se encarga de separar el texto en dos lineas, para ser impreso en el display
 //Recibe el numero de linea y cambia un dato miembro a lo que se debe imprimir
-void LCDB::getLine(int line) {
-
-    for (int i = 0; i < 16; i++) {
-        this->line[i] = data[line][i];
+void LCDB::getLine(int line_) {
+    for (int i = 0; i < N_COLUMN; i++) {
+        this->line[i] = data[line_][i];
     }
 }
 
@@ -158,8 +137,8 @@ bool LCDB::nextPos(cursorPosition& pos) {
     else {
         pos.column += 1;
     }
-    return true; //devuelve si sigue habiendo espacio disponible despues de la operacion
 
+    return true; //devuelve si sigue habiendo espacio disponible despues de la operacion
 }
 
 //Funcion que mueve el cursor arriba
@@ -173,9 +152,8 @@ bool LCDB::lcdMoveCursorUp() {
     {
         cursorPos.row -= 1;
     }
-    clearDisp();
-    printCursor();
-    printData();
+
+    drawDisp();
     return true;
 }
 
@@ -190,9 +168,8 @@ bool LCDB::lcdMoveCursorDown() {
     {
         cursorPos.row += 1;
     }
-    clearDisp();
-    printCursor();
-    printData();
+
+    drawDisp();
     return true;
 }
 
@@ -211,9 +188,8 @@ bool LCDB::lcdMoveCursorRight() {
     {
         this->cursorPos.column += 1;
     }
-    clearDisp();
-    printCursor();
-    printData();
+
+    drawDisp();
     return true;
 }
 
@@ -232,9 +208,8 @@ bool LCDB::lcdMoveCursorLeft() {
     {
         cursorPos.column -= 1;
     }
-    clearDisp();
-    printCursor();
-    printData();
+
+    drawDisp();
     return true;
 }
 
@@ -262,15 +237,41 @@ void LCDB::printCursor(void){
 
 //Funcion que limpia el display
 void LCDB::clearDisp() {
-    //al_set_target_backbuffer(this->display);
     al_clear_to_color(DISPLAY_COLOR);
-  //  al_flip_display();
 }
 
 void LCDB::drawDisp() {
     al_set_target_backbuffer(this->display);
     clearDisp();
-    printCursor();
+    //printCursor();
     printData();
     al_flip_display();
 }
+
+bool LCDB::initGraphics() {
+    if (!al_init()) {
+		fprintf(stderr, " failed to initialize allegro !\n");
+	    return false;
+	}
+
+    if (!al_init_font_addon()){
+        fprintf(stderr, "Failed to initialize the font !\n");
+	    return false;
+    }
+    display = al_create_display(N_COLUMN * U_SIZE, N_ROW * U_SIZE * 2);
+    if (!display) {
+
+        fprintf(stderr, "Failed to create display !\n");
+	    return false;
+    }
+    
+    txtFont = al_load_ttf_font("res\\love.ttf", U_SIZE, 0);
+    if (!this->txtFont) {
+        fprintf(stderr, "Failed to initialize the font !\n");
+	    return false;
+    }
+
+    return true;
+}
+
+
